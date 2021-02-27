@@ -10,18 +10,22 @@ ABaseCharacter::ABaseCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	AbilitySystemComp = CreateDefaultSubobject<UAbilitySystemComponent>("AbilitySystemComp");
-	BaseAttributeSetComp = CreateDefaultSubobject<UBaseAttributeSet>("BaseAttributeSetComp");
-
-	AbilitySystemComp->GetGameplayAttributeValueChangeDelegate(BaseAttributeSetComp->GetHealthAttribute()).AddUObject(this, &ABaseCharacter::OnHealthChangedNative);
-	AbilitySystemComp->GetGameplayAttributeValueChangeDelegate(BaseAttributeSetComp->GetManaAttribute()).AddUObject(this, &ABaseCharacter::OnManaChangedNative);
-	AbilitySystemComp->GetGameplayAttributeValueChangeDelegate(BaseAttributeSetComp->GetStaminaAttribute()).AddUObject(this, &ABaseCharacter::OnStaminaChangedNative);
 }
 
 // Called when the game starts or when spawned
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	if (AbilitySystemComp)
+	{
+		BaseAttributeSetComp = AbilitySystemComp->GetSet<UBaseAttributeSet>();
+
+		AbilitySystemComp->GetGameplayAttributeValueChangeDelegate(BaseAttributeSetComp->GetHealthAttribute()).AddUObject(this, &ABaseCharacter::OnHealthChagedNative);
+		AbilitySystemComp->GetGameplayAttributeValueChangeDelegate(BaseAttributeSetComp->GetManaAttribute()).AddUObject(this, &ABaseCharacter::OnManaChagedNative);
+		AbilitySystemComp->GetGameplayAttributeValueChangeDelegate(BaseAttributeSetComp->GetStaminaAttribute()).AddUObject(this, &ABaseCharacter::OnStaminaChagedNative);
+	}
+
 }
 
 // Called every frame
@@ -58,53 +62,33 @@ UAbilitySystemComponent* ABaseCharacter::GetAbilitySystemComponent() const
 
 void ABaseCharacter::GetHealthValues(float& Health, float& MaxHealth)
 {
-	if (BaseAttributeSetComp)
-	{
-		Health = BaseAttributeSetComp->GetHealth();
-		MaxHealth = BaseAttributeSetComp->GetMaxHealth();
-	}
+	Health = BaseAttributeSetComp->GetHealth();
+	MaxHealth = BaseAttributeSetComp->GetMaxHealth();
 }
 
 void ABaseCharacter::GetManaValues(float& Mana, float& MaxMana)
 {
-	if (BaseAttributeSetComp)
-	{
-		Mana = BaseAttributeSetComp->GetMana();
-		MaxMana = BaseAttributeSetComp->GetMaxMana();
-	}
+	Mana = BaseAttributeSetComp->GetMana();
+	MaxMana = BaseAttributeSetComp->GetMaxMana();
 }
 
 void ABaseCharacter::GetStaminaValues(float& Stamina, float& MaxStamina)
 {
-	if (BaseAttributeSetComp)
-	{
-		Stamina = BaseAttributeSetComp->GetStamina();
-		MaxStamina = BaseAttributeSetComp->GetMaxStamina();
-	}
+	Stamina = BaseAttributeSetComp->GetStamina();
+	MaxStamina = BaseAttributeSetComp->GetMaxStamina();
 }
 
-void ABaseCharacter::SetInitialAttributes(float Health, float MaxHealth, float Mana, float MaxMana, float Stamina, float MaxStamina)
-{
-	BaseAttributeSetComp->InitHealth(Health);
-	BaseAttributeSetComp->InitMaxHealth(MaxHealth);
-	BaseAttributeSetComp->InitMana(Mana);
-	BaseAttributeSetComp->InitMaxMana(MaxMana);
-	BaseAttributeSetComp->InitStamina(Stamina);
-	BaseAttributeSetComp->InitMaxStamina(MaxStamina);
-}
-
-void ABaseCharacter::OnHealthChangedNative(const FOnAttributeChangeData& Data)
+void ABaseCharacter::OnHealthChagedNative(const FOnAttributeChangeData& Data)
 {
 	OnHealthChanged(Data.OldValue, Data.NewValue);
 }
 
-void ABaseCharacter::OnManaChangedNative(const FOnAttributeChangeData& Data)
+void ABaseCharacter::OnManaChagedNative(const FOnAttributeChangeData& Data)
 {
 	OnManaChanged(Data.OldValue, Data.NewValue);
 }
 
-void ABaseCharacter::OnStaminaChangedNative(const FOnAttributeChangeData& Data)
+void ABaseCharacter::OnStaminaChagedNative(const FOnAttributeChangeData& Data)
 {
 	OnStaminaChanged(Data.OldValue, Data.NewValue);
 }
-

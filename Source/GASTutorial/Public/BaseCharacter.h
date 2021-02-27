@@ -39,8 +39,8 @@ public:
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BaseCharacter")
-	UBaseAttributeSet* BaseAttributeSetComp;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "BaseCharacter")
+	const class UBaseAttributeSet* BaseAttributeSetComp;
 
 	UFUNCTION(BlueprintPure, Category = "BaseCharacter")
 	void GetHealthValues(float& Health, float& MaxHealth);
@@ -49,12 +49,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = "BaseCharacter")
 	void GetStaminaValues(float& Stamina, float& MaxStamina);
 
-	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
-	void SetInitialAttributes(float Health, float MaxHealth, float Mana, float MaxMana, float Stamina, float MaxStamina);
-
-	void OnHealthChangedNative(const FOnAttributeChangeData& Data);
-	void OnManaChangedNative(const FOnAttributeChangeData& Data);
-	void OnStaminaChangedNative(const FOnAttributeChangeData& Data);
+	void OnHealthChagedNative(const FOnAttributeChangeData& Data);
+	void OnManaChagedNative(const FOnAttributeChangeData& Data);
+	void OnStaminaChagedNative(const FOnAttributeChangeData& Data);
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "BaseCharacter")
 	void OnHealthChanged(float OldValue, float NewValue);
@@ -62,4 +59,5 @@ public:
 	void OnManaChanged(float OldValue, float NewValue);
 	UFUNCTION(BlueprintImplementableEvent, Category = "BaseCharacter")
 	void OnStaminaChanged(float OldValue, float NewValue);
+
 };
