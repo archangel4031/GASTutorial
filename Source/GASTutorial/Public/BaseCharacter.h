@@ -60,4 +60,44 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "BaseCharacter")
 	void OnStaminaChanged(float OldValue, float NewValue);
 
+	//Initialize Abilities Multi
+	UFUNCTION(BlueprintCallable, Category="BaseCharacter")
+	void InitializeAbilityMulti(TArray<TSubclassOf<UGameplayAbility>> AbilitiesToAcquire, int32 AbilityLevel);
+
+	//Remove Abilities with Tag
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
+	void RemoveAbilityWithTags(FGameplayTagContainer TagContainer);
+
+	//Change Ability Level with Tag
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
+	void ChangeAbilityLevelWithTags(FGameplayTagContainer TagContainer, int32 NewLevel);
+
+	//Cancel Ability With Tag
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
+	void CancelAbilityWithTags(FGameplayTagContainer WithTags, FGameplayTagContainer WithoutTags);
+
+	//Add Loose Gameplay Tag
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
+	void AddLooseGameplayTag(FGameplayTag TagToAdd);
+
+	//Remove Loose Gameplay Tag
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
+	void RemoveLooseGameplayTags(FGameplayTag TagsToRemove);
+
+	//Apply GE to Target Data
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
+	void ApplyGEToTargetData(const FGameplayEffectSpecHandle& GESpec, const FGameplayAbilityTargetDataHandle& TargetData);
+
+	//Modify Health Attributes
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
+	void SetHealthValues(float NewHealth, float NewMaxHealth);
+
+	//Modify Mana Attributes
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
+	void SetManaValues(float NewMana, float NewMaxMana);
+
+	//Modify Stamina Attributes
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
+	void SetStaminaValues(float NewStamina, float NewMaxStamina);
+
 };

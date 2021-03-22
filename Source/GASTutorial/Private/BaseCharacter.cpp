@@ -16,7 +16,7 @@ ABaseCharacter::ABaseCharacter()
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	if (AbilitySystemComp)
 	{
 		BaseAttributeSetComp = AbilitySystemComp->GetSet<UBaseAttributeSet>();
@@ -92,3 +92,74 @@ void ABaseCharacter::OnStaminaChagedNative(const FOnAttributeChangeData& Data)
 {
 	OnStaminaChanged(Data.OldValue, Data.NewValue);
 }
+
+void ABaseCharacter::InitializeAbilityMulti(TArray<TSubclassOf<UGameplayAbility>> AbilitiesToAcquire, int32 AbilityLevel)
+{
+	for (TSubclassOf<UGameplayAbility> AbilitItem : AbilitiesToAcquire)
+	{
+		InitializeAbility(AbilitItem, AbilityLevel);
+	}
+}
+
+void ABaseCharacter::RemoveAbilityWithTags(FGameplayTagContainer TagContainer)
+{
+	TArray<FGameplayAbilitySpec*> MatchingAbilities;
+	AbilitySystemComp->GetActivatableGameplayAbilitySpecsByAllMatchingTags(TagContainer, MatchingAbilities, true);
+	for (FGameplayAbilitySpec* Spec : MatchingAbilities)
+	{
+		AbilitySystemComp->ClearAbility(Spec->Handle);
+	}
+}
+
+void ABaseCharacter::ChangeAbilityLevelWithTags(FGameplayTagContainer TagContainer, int32 NewLevel)
+{
+	TArray<FGameplayAbilitySpec*> MatchingAbility;
+	AbilitySystemComp->GetActivatableGameplayAbilitySpecsByAllMatchingTags(TagContainer, MatchingAbility, true);
+	for (FGameplayAbilitySpec* Spec : MatchingAbility)
+	{
+		Spec->Level = NewLevel;
+	}
+}
+
+void ABaseCharacter::CancelAbilityWithTags(FGameplayTagContainer WithTags, FGameplayTagContainer WithoutTags)
+{
+	AbilitySystemComp->CancelAbilities(&WithTags, &WithoutTags, nullptr);
+}
+
+void ABaseCharacter::AddLooseGameplayTag(FGameplayTag TagToAdd)
+{
+	GetAbilitySystemComponent()->AddLooseGameplayTag(TagToAdd);
+	GetAbilitySystemComponent()->SetTagMapCount(TagToAdd, 1);
+}
+
+void ABaseCharacter::RemoveLooseGameplayTags(FGameplayTag TagsToRemove)
+{
+	GetAbilitySystemComponent()->RemoveLooseGameplayTag(TagsToRemove);
+}
+
+void ABaseCharacter::ApplyGEToTargetData(const FGameplayEffectSpecHandle& GESpec, const FGameplayAbilityTargetDataHandle& TargetData)
+{
+	for (TSharedPtr<FGameplayAbilityTargetData> Data : TargetData.Data)
+	{
+		Data->ApplyGameplayEffectSpec(*GESpec.Data.Get());
+	}
+}
+
+void ABaseCharacter::SetHealthValues(float NewHealth, float NewMaxHealth)
+{
+	AbilitySystemComp->ApplyModToAttribute(BaseAttributeSetComp->GetHealthAttribute(), EGameplayModOp::Override, NewHealth);
+	AbilitySystemComp->ApplyModToAttribute(BaseAttributeSetComp->GetMaxHealthAttribute(), EGameplayModOp::Override, NewMaxHealth);
+}
+
+void ABaseCharacter::SetManaValues(float NewMana, float NewMaxMana)
+{
+	AbilitySystemComp->ApplyModToAttribute(BaseAttributeSetComp->GetManaAttribute(), EGameplayModOp::Override, NewMana);
+	AbilitySystemComp->ApplyModToAttribute(BaseAttributeSetComp->GetMaxManaAttribute(), EGameplayModOp::Override, NewMaxMana);
+}
+
+void ABaseCharacter::SetStaminaValues(float NewStamina, float NewMaxStamina)
+{
+	AbilitySystemComp->ApplyModToAttribute(BaseAttributeSetComp->GetStaminaAttribute(), EGameplayModOp::Override, NewStamina);
+	AbilitySystemComp->ApplyModToAttribute(BaseAttributeSetComp->GetMaxStaminaAttribute(), EGameplayModOp::Override, NewMaxStamina);
+}
+
