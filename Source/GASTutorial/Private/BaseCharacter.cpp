@@ -163,3 +163,10 @@ void ABaseCharacter::SetStaminaValues(float NewStamina, float NewMaxStamina)
 	AbilitySystemComp->ApplyModToAttribute(BaseAttributeSetComp->GetMaxStaminaAttribute(), EGameplayModOp::Override, NewMaxStamina);
 }
 
+void ABaseCharacter::GetShieldValues(float& Shield, float& MaxShield)
+{
+	Shield = BaseAttributeSetComp->GetShield();
+	MaxShield = BaseAttributeSetComp->GetMaxShield();
+}
+
+

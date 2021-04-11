@@ -42,4 +42,8 @@ void UBaseAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMo
 	{
 		SetStamina(FMath::Clamp(GetStamina(), 0.0f, GetMaxStamina()));
 	}
+	if (Data.EvaluatedData.Attribute == GetShieldAttribute())
+	{
+		SetShield(FMath::Clamp(GetShield(), 0.0f, GetMaxShield()));
+	}
 }

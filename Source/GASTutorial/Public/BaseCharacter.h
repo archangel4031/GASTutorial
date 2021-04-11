@@ -100,4 +100,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
 	void SetStaminaValues(float NewStamina, float NewMaxStamina);
 
+	UFUNCTION(BlueprintPure, Category = "BaseCharacter")
+	void GetShieldValues(float& Shield, float& MaxShield);
+
 };
