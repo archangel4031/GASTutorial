@@ -14,16 +14,16 @@ UBaseAttributeSet::UBaseAttributeSet()
 void UBaseAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data)
 {
 	Super::PostGameplayEffectExecute(Data);
-	
+
 	//This is the CPP implementation of how to add and remove Gameplay Tags on Full Health Event. Just uncomment below code lines
 	//Just make sure the Tag is present in the Editor in Project Settings
 	//ABaseCharacter* OwnerCharacter = Cast<ABaseCharacter>(GetOwningActor());
 	//FGameplayTag FullHealthTag = FGameplayTag::RequestGameplayTag(FName("char.ability.healthRegen.fullHealth"));
-	
+
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
 		SetHealth(FMath::Clamp(GetHealth(), 0.0f, GetMaxHealth()));
-		
+
 		//This is the CPP implementation of how to add and remove Gameplay Tags on Full Health Event. Just uncomment below code lines
 		//if (GetHealth() >= GetMaxHealth())
 		//{
@@ -45,5 +45,11 @@ void UBaseAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMo
 	if (Data.EvaluatedData.Attribute == GetShieldAttribute())
 	{
 		SetShield(FMath::Clamp(GetShield(), 0.0f, GetMaxShield()));
+	}
+	if (Data.EvaluatedData.Attribute == GetSpeedMultiplierAttribute())
+	{
+		SetSpeedMultiplier(FMath::Clamp(GetSpeedMultiplier(), 0.0f, 2.0f));
+		int32 SpeedStack = Data.EffectSpec.StackCount;
+		SpeedChangeDelegate.Broadcast(GetSpeedMultiplier(), SpeedStack);
 	}
 }

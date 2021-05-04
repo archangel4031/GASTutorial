@@ -24,7 +24,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -61,7 +61,7 @@ public:
 	void OnStaminaChanged(float OldValue, float NewValue);
 
 	//Initialize Abilities Multi
-	UFUNCTION(BlueprintCallable, Category="BaseCharacter")
+	UFUNCTION(BlueprintCallable, Category = "BaseCharacter")
 	void InitializeAbilityMulti(TArray<TSubclassOf<UGameplayAbility>> AbilitiesToAcquire, int32 AbilityLevel);
 
 	//Remove Abilities with Tag
@@ -102,5 +102,11 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "BaseCharacter")
 	void GetShieldValues(float& Shield, float& MaxShield);
+
+	UFUNCTION()
+	void OnSpeedChangeNative(float SpeedMultiplier, int32 StackCount);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "BaseCharacter")
+	void OnSpeedChange(float SpeedMultiplier, int32 StackCount);
 
 };

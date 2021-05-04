@@ -7,7 +7,7 @@
 // Sets default values
 ABaseCharacter::ABaseCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	AbilitySystemComp = CreateDefaultSubobject<UAbilitySystemComponent>("AbilitySystemComp");
 }
@@ -16,7 +16,7 @@ ABaseCharacter::ABaseCharacter()
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	if (AbilitySystemComp)
 	{
 		BaseAttributeSetComp = AbilitySystemComp->GetSet<UBaseAttributeSet>();
@@ -24,6 +24,7 @@ void ABaseCharacter::BeginPlay()
 		AbilitySystemComp->GetGameplayAttributeValueChangeDelegate(BaseAttributeSetComp->GetHealthAttribute()).AddUObject(this, &ABaseCharacter::OnHealthChagedNative);
 		AbilitySystemComp->GetGameplayAttributeValueChangeDelegate(BaseAttributeSetComp->GetManaAttribute()).AddUObject(this, &ABaseCharacter::OnManaChagedNative);
 		AbilitySystemComp->GetGameplayAttributeValueChangeDelegate(BaseAttributeSetComp->GetStaminaAttribute()).AddUObject(this, &ABaseCharacter::OnStaminaChagedNative);
+		const_cast<UBaseAttributeSet*>(BaseAttributeSetComp)->SpeedChangeDelegate.AddDynamic(this, &ABaseCharacter::OnSpeedChangeNative);
 	}
 
 }
@@ -62,20 +63,29 @@ UAbilitySystemComponent* ABaseCharacter::GetAbilitySystemComponent() const
 
 void ABaseCharacter::GetHealthValues(float& Health, float& MaxHealth)
 {
-	Health = BaseAttributeSetComp->GetHealth();
-	MaxHealth = BaseAttributeSetComp->GetMaxHealth();
+	if (BaseAttributeSetComp)
+	{
+		Health = BaseAttributeSetComp->GetHealth();
+		MaxHealth = BaseAttributeSetComp->GetMaxHealth();
+	}
 }
 
 void ABaseCharacter::GetManaValues(float& Mana, float& MaxMana)
 {
-	Mana = BaseAttributeSetComp->GetMana();
-	MaxMana = BaseAttributeSetComp->GetMaxMana();
+	if (BaseAttributeSetComp)
+	{
+		Mana = BaseAttributeSetComp->GetMana();
+		MaxMana = BaseAttributeSetComp->GetMaxMana();
+	}
 }
 
 void ABaseCharacter::GetStaminaValues(float& Stamina, float& MaxStamina)
 {
-	Stamina = BaseAttributeSetComp->GetStamina();
-	MaxStamina = BaseAttributeSetComp->GetMaxStamina();
+	if (BaseAttributeSetComp)
+	{
+		Stamina = BaseAttributeSetComp->GetStamina();
+		MaxStamina = BaseAttributeSetComp->GetMaxStamina();
+	}
 }
 
 void ABaseCharacter::OnHealthChagedNative(const FOnAttributeChangeData& Data)
@@ -169,4 +179,7 @@ void ABaseCharacter::GetShieldValues(float& Shield, float& MaxShield)
 	MaxShield = BaseAttributeSetComp->GetMaxShield();
 }
 
-
+void ABaseCharacter::OnSpeedChangeNative(float SpeedMultiplier, int32 StackCount)
+{
+	OnSpeedChange(SpeedMultiplier, StackCount);
+}

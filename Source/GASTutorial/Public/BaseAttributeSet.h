@@ -14,8 +14,11 @@ GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
 /**
- * 
+ *
  */
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FAttrChangeDelegate, float, SpeedMul, int32, StackCount);
+
 UCLASS()
 class GASTUTORIAL_API UBaseAttributeSet : public UAttributeSet
 {
@@ -59,6 +62,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BaseAttribute")
 	FGameplayAttributeData MaxShield;
 	ATTRIBUTE_ACCESSORS(UBaseAttributeSet, MaxShield);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BaseAttribute")
+	FGameplayAttributeData SpeedMultiplier;
+	ATTRIBUTE_ACCESSORS(UBaseAttributeSet, SpeedMultiplier);
+
+	FAttrChangeDelegate SpeedChangeDelegate;
 
 	void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
 
