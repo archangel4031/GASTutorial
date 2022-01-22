@@ -13,12 +13,11 @@ AGATargetActor::AGATargetActor()
 	bDestroyOnConfirmation = true;
 }
 
-bool AGATargetActor::LineTraceFN(FHitResult TraceHitResult)
+bool AGATargetActor::LineTraceFN(FHitResult& TraceHitResult)
 {
 	FVector ViewPoint;
 	FRotator ViewRotation;
 	MasterPC->GetPlayerViewPoint(ViewPoint, ViewRotation);
-	FHitResult HitResult;
 	FCollisionQueryParams QueryParams;
 	QueryParams.bTraceComplex = true;
 	APawn* MasterPawn = MasterPC->GetPawn();
@@ -26,8 +25,8 @@ bool AGATargetActor::LineTraceFN(FHitResult TraceHitResult)
 	{
 		QueryParams.AddIgnoredActor(MasterPawn->GetUniqueID());
 	}
-	FVector LookAtPoint = FVector();
-	bool TryTrace = GetWorld()->LineTraceSingleByChannel(HitResult, ViewPoint, ViewPoint + ViewRotation.Vector() * TraceRange, ECC_Visibility, QueryParams);
+
+	bool TryTrace = GetWorld()->LineTraceSingleByChannel(TraceHitResult, ViewPoint, ViewPoint + ViewRotation.Vector() * TraceRange, ECC_Visibility, QueryParams);
 
 	return TryTrace;
 }
