@@ -21,7 +21,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = true), Category"GASGameplayAbility")
 	float TraceRange;
 
-	bool LineTraceFN(FHitResult TraceHitResult);
+	bool LineTraceFN(FHitResult& TraceHitResult);
 
 	virtual void StartTargeting(UGameplayAbility* Ability) override;
 	virtual void ConfirmTargetingAndContinue() override;
