@@ -3,6 +3,7 @@
 
 #include "BaseCharacter.h"
 #include "BaseAttributeSet.h"
+#include "InventoryAttributeSet.h"
 
 // Sets default values
 ABaseCharacter::ABaseCharacter()
@@ -19,11 +20,13 @@ void ABaseCharacter::BeginPlay()
 
 	if (AbilitySystemComp)
 	{
-		BaseAttributeSetComp = AbilitySystemComp->GetSet<UBaseAttributeSet>();
+		BaseAttributeSetComp = AbilitySystemComp->AddSet<UBaseAttributeSet>();
+		InventoryAttributeSetComp = AbilitySystemComp->AddSet<UInventoryAttributeSet>();
 
 		AbilitySystemComp->GetGameplayAttributeValueChangeDelegate(BaseAttributeSetComp->GetHealthAttribute()).AddUObject(this, &ABaseCharacter::OnHealthChagedNative);
 		AbilitySystemComp->GetGameplayAttributeValueChangeDelegate(BaseAttributeSetComp->GetManaAttribute()).AddUObject(this, &ABaseCharacter::OnManaChagedNative);
 		AbilitySystemComp->GetGameplayAttributeValueChangeDelegate(BaseAttributeSetComp->GetStaminaAttribute()).AddUObject(this, &ABaseCharacter::OnStaminaChagedNative);
+
 		const_cast<UBaseAttributeSet*>(BaseAttributeSetComp)->SpeedChangeDelegate.AddDynamic(this, &ABaseCharacter::OnSpeedChangeNative);
 	}
 
@@ -182,4 +185,13 @@ void ABaseCharacter::GetShieldValues(float& Shield, float& MaxShield)
 void ABaseCharacter::OnSpeedChangeNative(float SpeedMultiplier, int32 StackCount)
 {
 	OnSpeedChange(SpeedMultiplier, StackCount);
+}
+
+void ABaseCharacter::GetInventory(float& Apple, float& Orange, float& Pineapple, float& AppleShake, float& FruitCocktail)
+{
+	Apple = InventoryAttributeSetComp->GetApple();
+	Orange = InventoryAttributeSetComp->GetOrange();
+	Pineapple = InventoryAttributeSetComp->GetPineapple();
+	AppleShake = InventoryAttributeSetComp->GetAppleShake();
+	FruitCocktail = InventoryAttributeSetComp->GetFruitCocktail();
 }

@@ -10,6 +10,7 @@
 #include "BaseCharacter.generated.h"
 
 class UBaseAttributeSet;
+class UInventoryAttributeSet;
 
 UCLASS()
 class GASTUTORIAL_API ABaseCharacter : public ACharacter, public IAbilitySystemInterface
@@ -41,6 +42,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "BaseCharacter")
 	const class UBaseAttributeSet* BaseAttributeSetComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "BaseCharacter")
+	const class UInventoryAttributeSet* InventoryAttributeSetComp;
 
 	UFUNCTION(BlueprintPure, Category = "BaseCharacter")
 	void GetHealthValues(float& Health, float& MaxHealth);
@@ -109,4 +113,10 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "BaseCharacter")
 	void OnSpeedChange(float SpeedMultiplier, int32 StackCount);
 
+	UFUNCTION(BlueprintPure, Category = "BaseCharacter")
+	void GetInventory(float& Apple,
+						float& Orange,
+						float& Pineapple,
+						float& AppleShake,
+						float& FruitCocktail);
 };
