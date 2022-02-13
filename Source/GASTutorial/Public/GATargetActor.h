@@ -14,4 +14,16 @@ class GASTUTORIAL_API AGATargetActor : public AGameplayAbilityTargetActor
 {
 	GENERATED_BODY()
 	
+public:
+
+	AGASTargetActor();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = true), Category"GASGameplayAbility")
+	float TraceRange;
+
+	bool LineTraceFN(FHitResult& TraceHitResult);
+
+	virtual void StartTargeting(UGameplayAbility* Ability) override;
+	virtual void ConfirmTargetingAndContinue() override;
+	
 };
