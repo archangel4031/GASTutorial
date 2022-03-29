@@ -30,7 +30,7 @@ UGEExecMelee::UGEExecMelee()
   ValidTransientAggregatorIdentifiers.AddTag(FGameplayTag::RequestGameplayTag("char.calc.damage.melee"));
 }
 
-UGEExecMelee::void Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecParams, FGameplayEffectCustomExecutionOutput& ExecOutputs) cosnt
+void UGEExecMelee::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecParams, FGameplayEffectCustomExecutionOutput& ExecOutputs) const
 {
   //Calc Variables
   float OutHealth = 0.0f;
