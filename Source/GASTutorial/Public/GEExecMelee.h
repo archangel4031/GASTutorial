@@ -17,5 +17,5 @@ class GASTUTORIAL_API UGEExecMelee : public UGameplayEffectExecutionCalculation
 public:
 	UGEExecMelee();
 	
-	void Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecParams, FGameplayEffectCustomExecutionOutput& ExecOutputs) cosnt;
+	void Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecParams, FGameplayEffectCustomExecutionOutput& ExecOutputs) const;
 };
